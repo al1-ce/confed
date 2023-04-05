@@ -6,8 +6,7 @@ Simple tool to quickly edit configs by typing two words
 [![git](https://img.shields.io/github/v/release/al1-ce/confed?label=git&logo=github&style=flat-square)](https://github.com/al1-ce/confed)
 ![license](https://img.shields.io/aur/license/confed.svg?style=flat-square)
 ![aur votes](https://img.shields.io/aur/votes/confed.svg?style=flat-square) 
-![dub rating](https://badgen.net/dub/rating/confed?style=flat)
-![dub rating](https://badgen.net/github/stars/al1-ce/confed?style=flat)
+![stars](https://badgen.net/github/stars/al1-ce/confed?style=flat)
 
 ## Config
 
