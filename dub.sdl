@@ -1,0 +1,21 @@
+name "confed"
+description "Simple tool to quickly edit configs by typing two words"
+authors "Alisa Lain"
+copyright "Copyright © 2023, Alisa Lain"
+license "MIT"
+dependency "sily" version="~>1.4.1"
+targetPath "bin/"
+targetName "confed"
+sourcePaths "src/"
+importPaths "src/"
+configuration "default" {
+	targetType "executable"
+	targetPath "./bin"
+	targetName "confed"
+}
+configuration "install" {
+	targetType "executable"
+	targetPath "./bin"
+	targetName "confed"
+	postBuildCommands "echo Copying binary to /usr/bin && sudo mv ./bin/confed /usr/bin/confed"
+}
