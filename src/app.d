@@ -85,9 +85,13 @@ int main(string[] args) {
         writeln("Error, can't find config with name \"", arg, "\".");
         return 1;
     }
-
-    editor = editor == "" ? getenv("EDITOR").to!string : editor;
     
+    if (getenv("EDITOR") == null && editor == "") {
+        write("$EDITOR not set, please enter editor command.\nEditor: ");
+        editor = readln()[0..$-1];
+    }
+    editor = editor == "" ? getenv("EDITOR").to!string : editor;
+    // writeln(getenv("EDITOR"));
     // writeln(editor ~ " " ~ conf[namePos].path);
     wait(spawnShell(editor ~ " " ~ conf[namePos].path));
 
