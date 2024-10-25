@@ -24,3 +24,5 @@ bin/
 
 # Code coverage
 *.lst
+
+/dub.selections.json
