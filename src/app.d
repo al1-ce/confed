@@ -16,6 +16,7 @@ int main(string[] args) {
     string setName = "";
     string editor = "";
     bool doList = false;
+    bool returnPath = false;
 
     GetoptResult help = getopt(
         args,
@@ -24,7 +25,8 @@ int main(string[] args) {
         "add|a", "Alias for set", &setName,
         "remove|r", "Removes config path", &removeName,
         "editor|e", "Open with custom editor command", &editor,
-        "list|l", "Lists all configs", &doList
+        "list|l", "Lists all configs", &doList,
+        "path|p", "Print config path to stdout and exit", &returnPath
     );
 
     if (help.helpWanted) {
@@ -33,15 +35,16 @@ int main(string[] args) {
             customOption("Set", "confed -s nvim ~/.config/nvim/"),
             customOption("Remove", "confed -r nvim"),
             customOption("List", "confed -l"),
-            customOption("Editor", "confed -e \"nvim --noplugin --\" nvim")
+            customOption("Editor", "confed -e \"nvim --noplugin --\" nvim"),
+            customOption("Use with shell", "VP=$(confed -p nvim); cd $VP; nvim $VP"),
         ];
         printGetopt("confed [args]", "Options", help.options, "Usage", usage);
         return 0;
     }
-    
+
     checkPath();
     Config[] conf = configRead();
-    
+
     if (doList) {
         foreach (Config c; conf) {
             writeln(c.name, ": \"", c.path, "\"");
@@ -74,7 +77,7 @@ int main(string[] args) {
         configWrite(conf);
         return 0;
     }
-    
+
     if (arg == "") {
         writeln("Error, missing config name.");
         return 1;
@@ -85,7 +88,12 @@ int main(string[] args) {
         writeln("Error, can't find config with name \"", arg, "\".");
         return 1;
     }
-    
+
+    if  (returnPath) {
+        writeln(conf[namePos].path);
+        return 0;
+    }
+
     if (getenv("EDITOR") == null && editor == "") {
         write("$EDITOR not set, please enter editor command.\nEditor: ");
         editor = readln()[0..$-1];
@@ -133,7 +141,7 @@ Config[] configRead() {
     while (!f.eof) {
         string line = f.readln();
         if (line == "") break;
-        if (!f.eof) line = line[0..$-1]; 
+        if (!f.eof) line = line[0..$-1];
         string[] l = line.split(" // ");
 
         if (l.length != 2) {
