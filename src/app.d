@@ -11,12 +11,13 @@ import core.stdc.stdlib: getenv, exit;
 import sily.getopt;
 import sily.path: fixPath;
 
+bool returnPath = false;
+
 int main(string[] args) {
     string removeName = "";
     string setName = "";
     string editor = "";
     bool doList = false;
-    bool returnPath = false;
 
     GetoptResult help = getopt(
         args,
@@ -71,7 +72,7 @@ int main(string[] args) {
             Config c = conf[namePos];
             conf = conf.split(c).join();
         } else {
-            writeln("Error, can't find config with name \"", removeName, "\".");
+            if (!returnPath) writeln("Error, can't find config with name \"", removeName, "\".");
             return 1;
         }
         configWrite(conf);
@@ -79,13 +80,13 @@ int main(string[] args) {
     }
 
     if (arg == "") {
-        writeln("Error, missing config name.");
+        if (!returnPath) writeln("Error, missing config name.");
         return 1;
     }
 
     int namePos = conf.findName(arg);
     if (namePos == -1) {
-        writeln("Error, can't find config with name \"", arg, "\".");
+        if (!returnPath) writeln("Error, can't find config with name \"", arg, "\".");
         return 1;
     }
 
@@ -145,7 +146,7 @@ Config[] configRead() {
         string[] l = line.split(" // ");
 
         if (l.length != 2) {
-            writeln(configPath.fixPath, ":", i, " Error, invalid line, expected \"name // path\", got \"", line, "\".");
+            if (!returnPath) writeln(configPath.fixPath, ":", i, " Error, invalid line, expected \"name // path\", got \"", line, "\".");
             exit(1);
         }
         string name = l[0];
